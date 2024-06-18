@@ -7,7 +7,6 @@ import (
 
 	"net"
 
-	//pb "buf.build/gen/go/jiangok/buf-hello/grpc-ecosystem/gateway/v2/album_list_service/v1/album_list_service/album_list_servicev1gateway"
 	gwpb "buf.build/gen/go/jiangok/buf-hello/grpc-ecosystem/gateway/v2/album_list_service/v1/album_list_service/album_list_servicev1gateway"
 	gpb "buf.build/gen/go/jiangok/buf-hello/grpc/go/album_list_service/v1/album_list_servicev1grpc"
 	pb "buf.build/gen/go/jiangok/buf-hello/protocolbuffers/go/album_list_service/v1"
