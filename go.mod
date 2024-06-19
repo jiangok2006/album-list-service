@@ -1,6 +1,6 @@
 module github.com/jiangok2006/album_list_service
 
-go 1.22.4
+go 1.23
 
 require (
 	buf.build/gen/go/jiangok/buf-hello/grpc/go v1.3.0-20240617023842-d17ffc790b20.3
