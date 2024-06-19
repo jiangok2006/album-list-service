@@ -10,6 +10,10 @@ import (
 	gwpb "buf.build/gen/go/jiangok/buf-hello/grpc-ecosystem/gateway/v2/album_list_service/v1/album_list_service/album_list_servicev1gateway"
 	gpb "buf.build/gen/go/jiangok/buf-hello/grpc/go/album_list_service/v1/album_list_servicev1grpc"
 	pb "buf.build/gen/go/jiangok/buf-hello/protocolbuffers/go/album_list_service/v1"
+
+	detail_gpb "buf.build/gen/go/jiangok/buf-hello/grpc/go/album_detail_service/v1/album_detail_servicev1grpc"
+	detail_pb "buf.build/gen/go/jiangok/buf-hello/protocolbuffers/go/album_detail_service/v1"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
 	"google.golang.org/grpc"
@@ -26,7 +30,20 @@ func NewServer() *server {
 
 func (s *server) GetAlbumList(ctx context.Context, in *pb.GetAlbumListRequest) (*pb.GetAlbumListResponse, error) {
 	log.Printf("Received request")
-	return &pb.GetAlbumListResponse{Id: "100", Title: "mytitle", Price: 10.00}, nil
+	opts := []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	}
+	conn, err := grpc.NewClient("0.0.0.0:8081", opts...)
+	if err != nil {
+		log.Fatalf("Failed to call detail service: %v", err)
+	}
+	defer conn.Close()
+	client := detail_gpb.NewAlbumDetailServiceClient(conn)
+	response, err := client.GetAlbumDetail(context.Background(), &detail_pb.GetAlbumDetailRequest{Id: "1"})
+	if err != nil {
+		log.Fatalf("Failed to get feature: %v", err)
+	}
+	return &pb.GetAlbumListResponse{Id: response.Id, Title: response.Title, Price: response.Price}, nil
 }
 
 // curl -k http://localhost:8090/v1/album_list_service
